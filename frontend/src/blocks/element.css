@@ -1,0 +1,110 @@
+    .element__image {
+        border-radius: 10px 10px 0 0;
+        cursor: pointer;
+        height: 100%;
+        width: 100%;
+        min-height: 282px;
+        max-height: 282px;
+        object-fit: cover;
+    }
+    
+    .element__delete-button {
+        cursor: pointer;
+        background-color: transparent;
+        background-image: url(../images/icons/trash.svg);
+        min-height: 19px;
+        width: 18px;
+        background-position: center;
+        background-size: cover;
+        border: none;
+        left: calc(100% - 25px);
+        top: 26px;
+        position: relative;
+    }
+    
+    .element__like-button {
+        background-color: transparent;
+        border: none;
+        padding: 0;
+        background-image: url(../images/icons/heart_icon.svg);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-width: 21px;
+        min-height: 19px;
+        transition: all 0.2s ease-out;
+        cursor: pointer;
+    }
+    
+    .element {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .element__title-area {
+        background-color: #fff;
+        color: black;
+        font-family: 'Inter', sans-serif;
+        font-style: normal;
+        font-weight: 900;
+        font-size: 24px;
+        line-height: 29px;
+        border-radius: 0 0 10px 10px;
+        display: flex;
+        flex-direction: row;
+        padding: 25px 15px 25px 21px;
+        align-items: center;
+    }
+    
+    .element__likeBtn {
+        background-image: url(../images/icons/heart_icon.svg);
+        width: 21px;
+        height: 19px;
+        background-repeat: no-repeat;
+        background-color: transparent;
+        background-position: center;
+        border: none;
+        flex-shrink: 0;
+        background-size: 19px;
+        padding: 0;
+    }
+    
+    .element__likeBtn:hover {
+        cursor: pointer;
+        opacity: 0.5;
+        transition: 0.3s;
+    }
+    
+    .element__title {
+        text-overflow: ellipsis;
+        flex-grow: 1;
+        font-weight: 900;
+        font-size: 24px;
+        line-height: 29px;
+        white-space: nowrap;
+        overflow: hidden;
+        margin: 0;
+    }
+    
+    .element__like-button_active {
+        background-image: url(../images/icons/heart_icon-filled.svg);
+    }
+    
+    .element__like-countainer {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .element__likes-count {
+        margin: 0 auto;
+    }
+    
+    @media screen and (max-width: 904px) {
+        .element__image {
+            width: 100%;
+            max-width: none;
+        }
+    }

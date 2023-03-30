@@ -1,0 +1,26 @@
+.elements {
+    color: #fff;
+    max-width: 880px;
+    margin: 46px 0 auto;
+}
+
+.elements__list {
+    row-gap: 21px;
+    column-gap: 17px;
+    display: grid;
+    padding-inline-start: initial;
+    grid-template-columns: repeat(auto-fit, minmax(282px, 1fr));
+   
+}
+
+@media screen and (max-width: 974px) {
+    .elements__list {
+        grid-template-columns: repeat(auto-fit, minmax(214px, 1fr));
+    }
+}
+
+@media screen and (max-width: 565px) {
+    .elements {
+        margin: 36px 0 0 0;
+    }
+}

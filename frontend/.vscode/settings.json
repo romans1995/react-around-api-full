@@ -1,0 +1,14 @@
+{
+    "editor.formatOnSave": false,
+    "editor.formatOnType": false,
+    "html.format.indentHandlebars": true,
+    "html.format.indentInnerHtml": true,
+    "html.format.templating": true,
+    "editor.formatOnPaste": false,
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+    "editor.parameterHints.enabled": false,
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "editor.formatOnSaveMode": "modificationsIfAvailable"
+}

@@ -1,0 +1,27 @@
+.footer {
+    margin-left: 17vw;
+    max-width: 318px;
+}
+
+.footer__copyrights {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    margin-top: 68px;
+    margin-bottom: 60px;
+}
+
+@media screen and (max-width: 565px) {
+    .footer {
+        max-width: 282px;
+        margin-left: 6vw;
+    }
+    .footer__copyrights {
+        font-size: 14px;
+        line-height: 17px;
+        margin-top: 50px;
+        margin-bottom: 36px;
+    }
+}
