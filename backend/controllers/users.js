@@ -1,9 +1,35 @@
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const {
   NOT_FOUND_ERROR,
   ERROR_CODE,
   SERVER_ERROR,
 } = require('../constants/utils');
+
+const { jwt } = process.env;
+
+// controllers/users.js
+
+module.exports.login = (req, res) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      // create a token
+      const token = jwt.sign(
+        { _id: user._id },
+        jwt,
+        {
+          expiresIn: '7d',
+        },
+      );
+      // return the token to client
+      res.send({ token });
+    })
+    .catch((err) => {
+      res.status(401).send({ message: err.message });
+    });
+};
 
 module.exports.getUsers = (req, res) => {
   User.find({})
@@ -30,10 +56,19 @@ module.exports.getUserById = async (req, res) => {
   }
 };
 module.exports.createUser = async (req, res) => {
-  const { name, about, avatar } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+  const hasedPassword = bcrypt.hash(password, 10);
+  User.findOne({ email }).then((user) => (user ? res.status(ERROR_CODE).send({ message: 'this email is takin ' }) : ''));
+  // if (User.findOne({ email })) {
+  //   res.status(ERROR_CODE).send({ message: 'this Email is already in use' });
+  // }
   try {
-    const newUser = await User.create({ name, about, avatar });
-    res.send(newUser);
+    await User.create({
+      name, about, avatar, email, hasedPassword,
+    }).then((user) => res.status(201).send({ data: user }));
+    // res.send(newUser);
   } catch (err) {
     if (err.name === 'ValidationError') {
       res.status(ERROR_CODE).send({ message: 'invalid data passed to the methods for creating a user ' });

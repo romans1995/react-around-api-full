@@ -5,5 +5,9 @@
      "linebreak-style": ["off"],
      "no-console": ["off"],
      "devDependencies":["off"],
+     "packageDir":["off"],
+     "includeInternal":["off"],
+     "consistent-return":["off"],
+      "import/no-extraneous-dependencies": ["error", { "devDependencies": "true" }]
   }
 }

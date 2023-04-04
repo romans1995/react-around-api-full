@@ -1,4 +1,6 @@
-const BASE_URL = "https://register.nomoreparties.co";
+// const BASE_URL = "https://register.nomoreparties.co";
+// const BASE_URL = "https://api.around-r.chickenkiller.com/";
+const BASE_URL = "http://localhost:3000";
 const customFetch = (url, heasders) => {
     return fetch(url, heasders).then(res => res.ok ? res.json() : Promise.reject(res.statusText));
 }
