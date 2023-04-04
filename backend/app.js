@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 app.use(helmet());
 app.use(limiter);
 // authorization
-app.use(auth);
+// app.use(auth);
 
 app.use(express.json());
 app.use(cors());

@@ -1,14 +1,14 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const jwt = require("jsonwebtoken")
 const {
   NOT_FOUND_ERROR,
   ERROR_CODE,
   SERVER_ERROR,
 } = require('../constants/utils');
 
-const { jwt } = process.env;
-
 // controllers/users.js
+module.exports.getUserData = (req, res) => {}
 
 module.exports.login = (req, res) => {
   const { email, password } = req.body;
@@ -18,7 +18,7 @@ module.exports.login = (req, res) => {
       // create a token
       const token = jwt.sign(
         { _id: user._id },
-        jwt,
+        process.env.JWT_TOKEN,
         {
           expiresIn: '7d',
         },
@@ -59,17 +59,15 @@ module.exports.createUser = async (req, res) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  const hasedPassword = bcrypt.hash(password, 10);
+  const hashdPassword = await bcrypt.hash(password, 10);
   User.findOne({ email }).then((user) => (user ? res.status(ERROR_CODE).send({ message: 'this email is takin ' }) : ''));
-  // if (User.findOne({ email })) {
-  //   res.status(ERROR_CODE).send({ message: 'this Email is already in use' });
-  // }
   try {
     await User.create({
-      name, about, avatar, email, hasedPassword,
+      name, about, avatar, email, password:hashdPassword,
     }).then((user) => res.status(201).send({ data: user }));
     // res.send(newUser);
   } catch (err) {
+    console.log(err)
     if (err.name === 'ValidationError') {
       res.status(ERROR_CODE).send({ message: 'invalid data passed to the methods for creating a user ' });
     } else {
