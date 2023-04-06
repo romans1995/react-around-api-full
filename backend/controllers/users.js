@@ -1,14 +1,21 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 const {
   NOT_FOUND_ERROR,
   ERROR_CODE,
   SERVER_ERROR,
 } = require('../constants/utils');
 
-// controllers/users.js
-module.exports.getUserData = (req, res) => {}
+module.exports.getUserData = (req, res) => {
+  console.log(req.user._id)
+  User.findById(req.user._id)
+   .orFail(() => {
+      throw new Error('No user found with this Id');
+    })
+    .then((user) => res.status(200).send(user))
+    .catch(() => res.status(SERVER_ERROR).send({ message: 'Error' }));
+}
 
 module.exports.login = (req, res) => {
   const { email, password } = req.body;
@@ -24,7 +31,7 @@ module.exports.login = (req, res) => {
         },
       );
       // return the token to client
-      res.send({ token });
+      res.send({ data: user.toJSON(), token } );
     })
     .catch((err) => {
       res.status(401).send({ message: err.message });

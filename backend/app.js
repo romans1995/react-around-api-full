@@ -7,7 +7,7 @@ const path = require('path');
 const cors = require('cors');
 // const router = require('./routes');
 const { NOT_FOUND_ERROR } = require('./constants/utils');
-const { login, createUser } = require('./controllers/users');
+const { login, createUser,getUserData} = require('./controllers/users');
 const auth = require('./middlewares/auth');
 
 const app = express();
@@ -24,27 +24,31 @@ const cardRoutes = require('./routes/cards');
 
 mongoose.connect('mongodb://127.0.0.1:27017/aroundb');
 mongoose.set('strictQuery', true);
-app.use((req, res, next) => {
-  req.user = { _id: '63ff590682ad41f0582569bc' };
-  next();
-});
+// app.use((req, res, next) => {
+//   req.user = { _id: '63ff590682ad41f0582569bc' };
+//   next();
+// });
 app.use(helmet());
 app.use(limiter);
 // authorization
-// app.use(auth);
+
 
 app.use(express.json());
 app.use(cors());
 app.options('*', cors());
-app.use(express.static(path.join(__dirname, 'routes')));
-app.use('/cards', cardRoutes);
-app.use('/users', userRoutes);
+
 app.post('/signin', login);
 app.post('/signup', createUser);
+app.get('/me', getUserData);
+
+app.use(express.static(path.join(__dirname, 'routes')));
+app.use('/cards',auth, cardRoutes);
+app.use('/users',auth,userRoutes);
+
 app.use((req, res) => {
   res.status(NOT_FOUND_ERROR).send({ message: 'The requested resource was not found' });
 });
-// app.use(router);
+
 app.listen(PORT, () => {
   console.log('Server listening on port 3000');
 });
