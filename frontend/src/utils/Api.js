@@ -1,24 +1,30 @@
 class Api {
     constructor({ baseUrl, headers }) {
         this._baseUrl = baseUrl;
+        this.token = localStorage.getItem("token");
         this._headers = headers;
 
     }
-    _customFetch(url, heasders) {
-        return fetch(url, heasders).then(res => res.ok ? res.json() : Promise.reject(res.statusText));
+    _customFetch(url, headers) {
+        return fetch(url, headers).then(res => res.ok ? res.json() : Promise.reject(res.statusText));
 
     }
 
     getInitalCards() {
         return this._customFetch(`${this._baseUrl}/cards`, {
-            headers: this._headers,
-
+            headers: {
+                accept: this._headers,
+                Authorization: `Bearer ${this.token}`
+            },
         })
 
     }
     setUserInfo({ name, about }) {
         return this._customFetch(`${this._baseUrl}/users/me`, {
-            headers: this._headers,
+            headers: {
+                accept: this._headers,
+                Authorization: `Bearer ${this.token}`
+            },
             method: "PATCH",
             body: JSON.stringify({
                 name: name,
@@ -29,13 +35,19 @@ class Api {
 
     getUserInformation() {
         return this._customFetch(`${this._baseUrl}/users/me`, {
-            headers: this._headers,
+            headers: {
+                accept: this._headers,
+                Authorization: `Bearer ${this.token}`
+            },
 
         })
     }
     createCard(data) {
         return this._customFetch(`${this._baseUrl}/cards`, {
-            headers: this._headers,
+            headers: {
+                accept: this._headers,
+                Authorization: `Bearer ${this.token}`
+            },
             method: 'POST',
             body: JSON.stringify(data)
         })
@@ -43,7 +55,10 @@ class Api {
 
     deleteCard(cardId) {
         return fetch(`${this._baseUrl}/cards/${cardId}`, {
-            headers: this._headers,
+            headers: {
+                accept: this._headers,
+                Authorization: `Bearer ${this.token}`
+            },
             method: "DELETE",
         });
     }
@@ -51,19 +66,28 @@ class Api {
     changeLikeCardStatus(cardId, isLiked) {
         if (!isLiked) {
             return this._customFetch(`${this._baseUrl}/cards/likes/${cardId}`, {
-                headers: this._headers,
+                headers: {
+                    accept: this._headers,
+                    Authorization: `Bearer ${this.token}`
+                },
                 method: "PUT",
             });
         } else {
             return this._customFetch(`${this._baseUrl}/cards/likes/${cardId}`, {
-                headers: this._headers,
+                headers: {
+                    accept: this._headers,
+                    Authorization: `Bearer ${this.token}`
+                },
                 method: "DELETE",
             });
         }
     }
-    setAvatarImage(url) {
+    setAvatarImage(url, token) {
         return this._customFetch(`${this._baseUrl}/users/me/avatar`, {
-            headers: this._headers,
+            headers: {
+                accept: this._headers,
+                Authorization: `Bearer ${token}`
+            },
             method: 'PATCH',
             body: JSON.stringify({
                 avatar: url,
@@ -72,10 +96,14 @@ class Api {
     }
 }
 
+// export const api = new Api({
+//     baseUrl: "https://around.nomoreparties.co/v1/cohort-3-en",
+//     headers: {
+//         authorization: "bc512917-6cb4-408b-9fef-08d285de7af3",
+//         "Content-Type": "application/json"
+//     }
+// });
 export const api = new Api({
-    baseUrl: "https://around.nomoreparties.co/v1/cohort-3-en",
-    headers: {
-        authorization: "bc512917-6cb4-408b-9fef-08d285de7af3",
-        "Content-Type": "application/json"
-    }
+    baseUrl: "http://localhost:3000",
+
 });

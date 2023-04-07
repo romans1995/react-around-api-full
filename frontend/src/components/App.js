@@ -93,7 +93,7 @@ function App() {
   }
   const handleUpdateAvatar = (url) => {
     setIsLoading(true);
-    api.setAvatarImage(url).then((res) => {
+    api.setAvatarImage(url,token).then((res) => {
       setIsLoading(false);
       setCurrentUser(res);
       closeAllPopups();
@@ -138,6 +138,7 @@ function App() {
         if (res.token) {
           setIsLoggedIn(true);
           localStorage.setItem('token', res.token);
+          setToken(res.token);
           setUserEmail(email);
           history.push('/around-react');
         } else {
@@ -184,20 +185,23 @@ function App() {
       })
       .catch(console.log);
   }, []);
+
   useEffect(() => {
-    api
-      .getInitalCards()
+    if(token){
+      api
+      .getInitalCards(token)
       .then((res) => {
         setCards(res);
       })
       .catch(console.log);
-  }, []);
+    }
+  }, [token]);
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
       checkTocken(token).then(res => {
         setIsLoggedIn(true);
-        setUserEmail(res.data.email)
+        setUserEmail(res.email)
         history.push('/');
       }).catch((err) => {
         console.log(err);

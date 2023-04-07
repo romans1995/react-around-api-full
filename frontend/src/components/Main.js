@@ -12,7 +12,7 @@ const Main = ({
   cards
    
 }) => {
-  
+  console.log(cards);
   const currentUser = useContext(CurrentUserContext);
   return (
     <main className="main">
@@ -43,8 +43,7 @@ const Main = ({
       </section>
       <div className="elements">
         <ul className="elements__list">
-          
-          {cards.map((card) => {
+          {cards.data.map((card) => {
             return (
               <Card card={card} key={card._id} onCardClick={handleCardClick} onCardLike ={onCardLike}  onCardDelete ={onCardDelete } />
             );

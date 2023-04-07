@@ -12,8 +12,6 @@ module.exports = (req, res, next) => {
    // auth header exists and is in correct format
    // so extract the token from the header
    const token = authorization.replace('Bearer ', '');
-   
-   // if token is verified, save the payload
    let payload;
    try {
      payload = jwt.verify(token, process.env.JWT_TOKEN);
@@ -28,8 +26,7 @@ module.exports = (req, res, next) => {
    to the latter parts of the route. See the `Accessing user 
    data with req.user` example for details. */
    req.user = payload;
-
    // sending the request to the next middleware
-   next();
+   return next();
 };
 

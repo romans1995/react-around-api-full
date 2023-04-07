@@ -9,6 +9,7 @@ const cors = require('cors');
 const { NOT_FOUND_ERROR } = require('./constants/utils');
 const { login, createUser,getUserData} = require('./controllers/users');
 const auth = require('./middlewares/auth');
+const router = require('express').Router();
 
 const app = express();
 
@@ -35,12 +36,13 @@ app.use(limiter);
 
 app.use(express.json());
 app.use(cors());
-app.options('*', cors());
+// app.options('*', cors());
 
 app.post('/signin', login);
 app.post('/signup', createUser);
 app.get('/me', getUserData);
 
+router.use(auth);
 app.use(express.static(path.join(__dirname, 'routes')));
 app.use('/cards',auth, cardRoutes);
 app.use('/users',auth,userRoutes);

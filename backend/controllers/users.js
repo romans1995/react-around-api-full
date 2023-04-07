@@ -8,7 +8,7 @@ const {
 } = require('../constants/utils');
 
 module.exports.getUserData = (req, res) => {
-  console.log(req.user._id)
+console.log(req.user._id);
   User.findById(req.user._id)
    .orFail(() => {
       throw new Error('No user found with this Id');
@@ -30,6 +30,7 @@ module.exports.login = (req, res) => {
           expiresIn: '7d',
         },
       );
+      req.headers.token = token;
       // return the token to client
       res.send({ data: user.toJSON(), token } );
     })
@@ -46,7 +47,7 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findById({ _id: req.params._id }).orFail(() => {
+    const user = await User.findById({ _id: req.user._id }).orFail(() => {
       const error = new Error('No user/card found with that id');
       error.statusCode = NOT_FOUND_ERROR;
       throw error;
@@ -56,7 +57,7 @@ module.exports.getUserById = async (req, res) => {
     if (err.statusCode === NOT_FOUND_ERROR) {
       res.status(NOT_FOUND_ERROR).send({ message: 'invalid user id' });
     } else if (err.name === 'CastError') {
-      res.status(ERROR_CODE).send({ message: 'invalid user id' });
+      res.status(ERROR_CODE).send({ message: 'invalid user id ' });
     } else {
       res.status(SERVER_ERROR).send({ message: 'An error has occurred on the server.' });
     }
