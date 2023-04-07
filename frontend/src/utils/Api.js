@@ -13,7 +13,7 @@ class Api {
     getInitalCards() {
         return this._customFetch(`${this._baseUrl}/cards`, {
             headers: {
-                accept: this._headers,
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${this.token}`
             },
         })
@@ -22,7 +22,7 @@ class Api {
     setUserInfo({ name, about }) {
         return this._customFetch(`${this._baseUrl}/users/me`, {
             headers: {
-                accept: this._headers,
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${this.token}`
             },
             method: "PATCH",
@@ -36,7 +36,7 @@ class Api {
     getUserInformation() {
         return this._customFetch(`${this._baseUrl}/users/me`, {
             headers: {
-                accept: this._headers,
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${this.token}`
             },
 
@@ -45,7 +45,7 @@ class Api {
     createCard(data) {
         return this._customFetch(`${this._baseUrl}/cards`, {
             headers: {
-                accept: this._headers,
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${this.token}`
             },
             method: 'POST',
@@ -56,7 +56,7 @@ class Api {
     deleteCard(cardId) {
         return fetch(`${this._baseUrl}/cards/${cardId}`, {
             headers: {
-                accept: this._headers,
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${this.token}`
             },
             method: "DELETE",
@@ -64,10 +64,11 @@ class Api {
     }
 
     changeLikeCardStatus(cardId, isLiked) {
+
         if (!isLiked) {
             return this._customFetch(`${this._baseUrl}/cards/likes/${cardId}`, {
                 headers: {
-                    accept: this._headers,
+                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${this.token}`
                 },
                 method: "PUT",
@@ -75,7 +76,7 @@ class Api {
         } else {
             return this._customFetch(`${this._baseUrl}/cards/likes/${cardId}`, {
                 headers: {
-                    accept: this._headers,
+                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${this.token}`
                 },
                 method: "DELETE",

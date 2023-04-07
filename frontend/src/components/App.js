@@ -56,7 +56,7 @@ function App() {
   const handleAddPlaceSubmit = (name, link) => {
     setIsLoading(true);
     api.createCard({ name, link }).then((newCard) => {
-      setCards([newCard, ...cards]);
+      setCards([newCard, ...cards.data]);
       closeAllPopups();
     }).catch(console.log)
       .finally(() => setIsLoading(false));
@@ -184,7 +184,7 @@ function App() {
         setCurrentUser(user);
       })
       .catch(console.log);
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     if(token){
@@ -202,7 +202,7 @@ function App() {
       checkTocken(token).then(res => {
         setIsLoggedIn(true);
         setUserEmail(res.email)
-        history.push('/');
+        history.push('/around-react');
       }).catch((err) => {
         console.log(err);
         history.push('/signin');
