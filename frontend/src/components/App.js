@@ -41,6 +41,7 @@ function App() {
     name: "",
     link: "",
   });
+  // const [isLoggedIn , setIsLoggedIn ] = useState(false);
   const [cards, setCards] = useState([]);
   const [userEmail, setUserEmail] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -178,32 +179,43 @@ function App() {
 
 
   useEffect(() => {
-    api
-      .getUserInformation()
+    if(token){
+      api
+      .getUserInformation(token)
       .then((user) => {
         setCurrentUser(user);
       })
       .catch(console.log);
-  }, [token]);
-
-  useEffect(() => {
-    if(token){
       api
       .getInitalCards(token)
       .then((res) => {
+        console.log(res,"res");
         setCards(res);
       })
       .catch(console.log);
     }
   }, [token]);
 
+  // useEffect(() => {
+  //   if(token){
+  //     api
+  //     .getInitalCards(token)
+  //     .then((res) => {
+  //       console.log(res,"res");
+  //       setCards(res);
+  //     })
+  //     .catch(console.log);
+  //   }
+  // }, [token]);
+
   useEffect(() => {
-    console.log(token,"token")
     if (token) {
       checkTocken(token).then(res => {
+        if (res._id) {
         setIsLoggedIn(true);
         setUserEmail(res.email)
         history.push('/around-react');
+        }
       }).catch((err) => {
         console.log(err);
         history.push('/signin');
@@ -212,8 +224,10 @@ function App() {
         .finally(() => {
           setIsCheckToken(false);
         });
+    }else {
+      setIsCheckToken(false);
     }
-  }, [isLoggedIn, history, token])
+  }, [history, token])
 
 
 
@@ -224,6 +238,7 @@ function App() {
         <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userEmail={userEmail} />
         <Switch>
           <ProtectedRoute
+            exact
             path="/around-react"
             isLoggedIn={isLoggedIn}
             ischeckToken={ischeckToken}

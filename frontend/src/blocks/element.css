@@ -22,6 +22,10 @@
         position: relative;
     }
     
+    .element__delete-button_hidden {
+        display: none;
+    }
+    
     .element__like-button {
         background-color: transparent;
         border: none;

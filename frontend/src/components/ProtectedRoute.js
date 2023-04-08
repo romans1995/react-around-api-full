@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 
 const ProtectedRoute = ({ children,ischeckToken, isLoggedIn, ...props }) => {
   // const isRenderSpinner = ischeckToken // true
-  return(localStorage.getItem("token")?
+  return(isLoggedIn?
     <Route {...props}>
     {  children }
   </Route> 

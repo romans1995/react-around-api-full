@@ -10,12 +10,13 @@ class Api {
 
     }
 
-    getInitalCards() {
+    getInitalCards(token) {
         return this._customFetch(`${this._baseUrl}/cards`, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${this.token}`
+                Authorization: `Bearer ${token}`
             },
+            body: JSON.stringify()
         })
 
     }
@@ -33,11 +34,11 @@ class Api {
         })
     }
 
-    getUserInformation() {
+    getUserInformation(token) {
         return this._customFetch(`${this._baseUrl}/users/me`, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${this.token}`
+                Authorization: `Bearer ${token}`
             },
 
         })
@@ -64,9 +65,8 @@ class Api {
     }
 
     changeLikeCardStatus(cardId, isLiked) {
-
         if (!isLiked) {
-            return this._customFetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+            return this._customFetch(`${this._baseUrl}/cards/${cardId}/likes`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${this.token}`
@@ -74,7 +74,7 @@ class Api {
                 method: "PUT",
             });
         } else {
-            return this._customFetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+            return this._customFetch(`${this._baseUrl}/cards/${cardId}/likes`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${this.token}`

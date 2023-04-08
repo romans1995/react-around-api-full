@@ -8,7 +8,6 @@ const {
 } = require('../constants/utils');
 
 module.exports.getUserData = (req, res) => {
-console.log(req.user._id);
   User.findById(req.user._id)
    .orFail(() => {
       throw new Error('No user found with this Id');
