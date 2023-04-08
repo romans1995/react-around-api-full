@@ -86,7 +86,7 @@ class Api {
     setAvatarImage(url, token) {
         return this._customFetch(`${this._baseUrl}/users/me/avatar`, {
             headers: {
-                accept: this._headers,
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
             },
             method: 'PATCH',
@@ -106,5 +106,7 @@ class Api {
 // });
 export const api = new Api({
     baseUrl: "http://localhost:3000",
-
+    headers: {
+        "Content-Type": "application/json"
+    }
 });

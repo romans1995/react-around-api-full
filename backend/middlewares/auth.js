@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
+  console.log(req.headers)
   // get authorization from the header by destructuring
   const { authorization } = req.headers;
   // check that the header exists and starts with 'Bearer '

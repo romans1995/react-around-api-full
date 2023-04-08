@@ -198,7 +198,8 @@ function App() {
   }, [token]);
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    console.log(token,"token")
+    if (token) {
       checkTocken(token).then(res => {
         setIsLoggedIn(true);
         setUserEmail(res.email)
