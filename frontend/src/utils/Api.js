@@ -69,6 +69,7 @@ class Api {
             return this._customFetch(`${this._baseUrl}/cards/${cardId}/likes`, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Access-Control-Allow-Methods': 'PUT',
                     Authorization: `Bearer ${this.token}`
                 },
                 method: "PUT",

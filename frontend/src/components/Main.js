@@ -12,7 +12,7 @@ const Main = ({
   cards
    
 }) => {
-  console.log(cards);
+  console.log(cards,"main");
   const currentUser = useContext(CurrentUserContext);
   return (
     <main className="main">
