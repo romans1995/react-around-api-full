@@ -43,11 +43,11 @@ class Api {
 
         })
     }
-    createCard(data) {
+    createCard(data, token) {
         return this._customFetch(`${this._baseUrl}/cards`, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${this.token}`
+                Authorization: `Bearer ${token}`
             },
             method: 'POST',
             body: JSON.stringify(data)

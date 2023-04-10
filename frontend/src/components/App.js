@@ -42,7 +42,7 @@ function App() {
     link: "",
   });
   // const [isLoggedIn , setIsLoggedIn ] = useState(false);
-  const [cards, setCards] = useState([]);
+  const [cards, setCards] = useState({});
   const [userEmail, setUserEmail] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -56,30 +56,55 @@ function App() {
 
   const handleAddPlaceSubmit = (name, link) => {
     setIsLoading(true);
-    api.createCard({ name, link }).then((newCard) => {
-      setCards([newCard, ...cards.data]);
+    api.createCard({ name, link },token).then((newCard) => {
+      setCards({ data: [newCard, ...cards.data] });
       closeAllPopups();
     }).catch(console.log)
       .finally(() => setIsLoading(false));
   }
-
   function handleCardLike(card) {
-    // Check one more time if this card was already liked
-    const isLiked = card.likes.some(user =>
-      user === currentUser._id,
-      );
-    // Send a request to the API and getting the updated card data
-    api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
-      setCards((cards) => cards.map((currentCard) => currentCard._id === card._id ? newCard : currentCard));
-    }).catch(console.log);
+    if (!card) {
+      return;
+    }
+    const isLiked = card.likes.some(user => user === currentUser._id);
+    api
+      .changeLikeCardStatus(card._id, isLiked, token)
+      .then(newCard => {
+        const addnewcards = 
+          cards.data.map(currentCard => {
+            return currentCard._id === card._id ? newCard : currentCard;
+          })
+        setCards({data:addnewcards})
+      })
+      .catch(err => {
+        console.log(err);
+      });
+      console.log(cards,"end of like func")
   }
+  // function handleCardLike(card) {
+  //   // Check one more time if this card was already liked
+  //   const isLiked = card.likes === undefined ?false:card.likes.some(user =>
+  //     user === currentUser._id
+  //     );
+  //   // Send a request to the API and getting the updated card data
+  //   api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
+  //     // console.log(cards.data,"newarrofcards");
+  //   let newArrOfCards = cards.data === undefined
+  //   ?cards.map((currentCard) => currentCard._id === card._id ? newCard : currentCard)
+  //    : cards.data.map((currentCard) => currentCard._id === card._id ? newCard : currentCard);
+  //   //  newArrOfCards = Object.assign({}, newArrOfCards);
+  //   console.log(newArrOfCards,"like")
+  //     setCards({data:newArrOfCards});
+  //   }).catch(console.log);
+  // }
   function handleCardDelete(e) {
     e.preventDefault();
     setIsLoading(true);
     api.deleteCard(selectedCard._id).then((newCard) => {
       setIsLoading(false);
-      const newCards = cards.filter(
-        (currentCard) => currentCard._id !== selectedCard._id
+      const newCards = cards.data?.filter(
+        (currentCard) => currentCard._id !== selectedCard._id)||cards.filter(
+          (currentCard) => currentCard._id !== selectedCard._id
       );
       setCards(newCards);
       closeAllPopups();
@@ -180,23 +205,23 @@ function App() {
   }, []);
 
 
-  useEffect(() => {
-    if(token){
-      api
-      .getUserInformation(token)
-      .then((user) => {
-        setCurrentUser(user);
-      })
-      .catch(console.log);
-      api
-      .getInitalCards(token)
-      .then((res) => {
-        console.log(res,"res");
-        setCards(res);
-      })
-      .catch(console.log);
-    }
-  }, [token]);
+  // useEffect(() => {
+  //   if(token){
+  //     api
+  //     .getUserInformation(token)
+  //     .then((user) => {
+  //       setCurrentUser(user);
+  //     })
+  //     .catch(console.log);
+  //     api
+  //     .getInitalCards(token)
+  //     .then((res) => {
+  //       // console.log({data:[res]},"res")
+  //       setCards(res);
+  //     })
+  //     .catch(console.log);
+  //   }
+  // }, [token]);
 
   // useEffect(() => {
   //   if(token){
@@ -211,7 +236,21 @@ function App() {
   // }, [token]);
 
   useEffect(() => {
+    console.log("useEfeect run")
     if (token) {
+      api
+      .getUserInformation(token)
+      .then((user) => {
+        setCurrentUser(user);
+      })
+      .catch(console.log);
+      api
+      .getInitalCards(token)
+      .then((res) => {
+        console.log( Array.isArray(res),"res")
+        setCards(res);
+      })
+      .catch(console.log);
       checkTocken(token).then(res => {
         if (res._id) {
         setIsLoggedIn(true);

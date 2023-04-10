@@ -43,19 +43,18 @@ module.exports.deletecardById = async(req, res) => {
         }
     }
 };
-
 module.exports.likeCard = async(req, res) => {
     try {
-        await Card.findByIdAndUpdate(
-            req.params.cardId, { $addToSet: { likes: req.user._id } },
+        const updatedCard = await Card.findByIdAndUpdate(
+            req.params.cardId, { $addToSet: { likes: req.user._id } }, { new: true }
+        ).populate('likes');
 
-            { new: true },
-        ).orFail(() => {
+        if (!updatedCard) {
             const error = new Error('No user/card found with that id');
             error.statusCode = NOT_FOUND_ERROR;
             throw error;
-        });
-        res.send({ message: 'like was add' });
+        }
+        res.send(updatedCard);
     } catch (err) {
         if (err.statusCode === NOT_FOUND_ERROR) {
             res.status(NOT_FOUND_ERROR).send({ message: 'invalid card id' });
@@ -67,16 +66,17 @@ module.exports.likeCard = async(req, res) => {
     }
 };
 
+
 module.exports.dislikeCard = async(req, res) => {
     try {
-        await Card.findByIdAndUpdate(
+        const updatedCard = await Card.findByIdAndUpdate(
             req.params.cardId, { $pull: { likes: req.user._id } }, { new: true },
         ).orFail(() => {
             const error = new Error('No card found with that id');
             error.statusCode = NOT_FOUND_ERROR;
             throw error;
         });
-        res.send({ message: 'like was deleted' });
+        res.send(updatedCard);
     } catch (err) {
         if (err.statusCode === NOT_FOUND_ERROR) {
             res.status(NOT_FOUND_ERROR).send({ message: 'invalid card id' });

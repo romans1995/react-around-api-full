@@ -12,7 +12,7 @@ const Main = ({
   cards
    
 }) => {
-  console.log(cards,"main");
+  console.log( Array.isArray(cards),"main cards is array",cards)
   const currentUser = useContext(CurrentUserContext);
   return (
     <main className="main">
@@ -43,7 +43,11 @@ const Main = ({
       </section>
       <div className="elements">
         <ul className="elements__list">
-          {cards.data.map((card) => {
+          {cards.data?cards.data.map((card) => {
+            return (
+              <Card card={card} key={card._id} onCardClick={handleCardClick} onCardLike ={onCardLike}  onCardDelete ={onCardDelete } />
+            );
+          }):cards.map((card) => {
             return (
               <Card card={card} key={card._id} onCardClick={handleCardClick} onCardLike ={onCardLike}  onCardDelete ={onCardDelete } />
             );
