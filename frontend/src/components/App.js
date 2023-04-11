@@ -79,24 +79,9 @@ function App() {
       .catch(err => {
         console.log(err);
       });
-      console.log(cards,"end of like func")
+      // console.log(cards,"end of like func")
   }
-  // function handleCardLike(card) {
-  //   // Check one more time if this card was already liked
-  //   const isLiked = card.likes === undefined ?false:card.likes.some(user =>
-  //     user === currentUser._id
-  //     );
-  //   // Send a request to the API and getting the updated card data
-  //   api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
-  //     // console.log(cards.data,"newarrofcards");
-  //   let newArrOfCards = cards.data === undefined
-  //   ?cards.map((currentCard) => currentCard._id === card._id ? newCard : currentCard)
-  //    : cards.data.map((currentCard) => currentCard._id === card._id ? newCard : currentCard);
-  //   //  newArrOfCards = Object.assign({}, newArrOfCards);
-  //   console.log(newArrOfCards,"like")
-  //     setCards({data:newArrOfCards});
-  //   }).catch(console.log);
-  // }
+
   function handleCardDelete(e) {
     e.preventDefault();
     setIsLoading(true);
@@ -106,7 +91,7 @@ function App() {
         (currentCard) => currentCard._id !== selectedCard._id)||cards.filter(
           (currentCard) => currentCard._id !== selectedCard._id
       );
-      setCards(newCards);
+      setCards({data:newCards});
       closeAllPopups();
     }).catch(console.log);
   }
@@ -204,40 +189,9 @@ function App() {
     return () => document.removeEventListener('keydown', closeByEscape)
   }, []);
 
-
-  // useEffect(() => {
-  //   if(token){
-  //     api
-  //     .getUserInformation(token)
-  //     .then((user) => {
-  //       setCurrentUser(user);
-  //     })
-  //     .catch(console.log);
-  //     api
-  //     .getInitalCards(token)
-  //     .then((res) => {
-  //       // console.log({data:[res]},"res")
-  //       setCards(res);
-  //     })
-  //     .catch(console.log);
-  //   }
-  // }, [token]);
-
-  // useEffect(() => {
-  //   if(token){
-  //     api
-  //     .getInitalCards(token)
-  //     .then((res) => {
-  //       console.log(res,"res");
-  //       setCards(res);
-  //     })
-  //     .catch(console.log);
-  //   }
-  // }, [token]);
-
-  useEffect(() => {
-    console.log("useEfeect run")
-    if (token) {
+    useEffect(() => {
+    console.log("useEfeect run",cards,token);
+      if (token) {
       api
       .getUserInformation(token)
       .then((user) => {
@@ -247,7 +201,7 @@ function App() {
       api
       .getInitalCards(token)
       .then((res) => {
-        console.log( Array.isArray(res),"res")
+        // console.log( Array.isArray(res),"res")
         setCards(res);
       })
       .catch(console.log);
