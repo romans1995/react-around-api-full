@@ -5,13 +5,13 @@ const {
     SERVER_ERROR,
 } = require('../constants/utils');
 
-module.exports.getCards = (req, res) => {
+module.exports.getCards = (req, res, next) => {
     Card.find({})
         .then((card) => res.send({ data: card }))
-        .catch(() => res.status(SERVER_ERROR).send({ message: 'An error has occurred on the server.' }));
+        .catch(() => next(res.status(SERVER_ERROR).send({ message: 'An error has occurred on the server.' })));
 };
 
-module.exports.createCard = async(req, res) => {
+module.exports.createCard = async(req, res, next) => {
     const { name, link } = req.body;
     const owner = req.user._id;
     try {
@@ -19,9 +19,9 @@ module.exports.createCard = async(req, res) => {
         res.send(newcard);
     } catch (err) {
         if (err.name === 'ValidationError') {
-            res.status(ERROR_CODE).send({ message: 'try to check your data' });
+            next(res.status(ERROR_CODE).send({ message: 'try to check your data' }));
         } else {
-            res.status(SERVER_ERROR).send({ message: 'An error has occurred on the server.' });
+            next(res.status(SERVER_ERROR).send({ message: 'An error has occurred on the server.' }));
         }
     }
 };

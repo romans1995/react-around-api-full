@@ -17,10 +17,10 @@ module.exports.getUserData = (req, res) => {
         .catch(() => res.status(SERVER_ERROR).send({ message: 'Error' }));
 }
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
     const { email, password } = req.body;
 
-    return User.findUserByCredentials(email, password)
+    return User.findUserByCredentials(email, password, next)
         .then((user) => {
             // create a token
             const token = jwt.sign({ _id: user._id },
@@ -32,18 +32,18 @@ module.exports.login = (req, res) => {
             // return the token to client
             res.send({ data: user.toJSON(), token });
         })
-        .catch((err) => {
-            res.status(401).send({ message: err.message });
+        .catch(() => {
+            next(new Error('Incorrect email or password'));
         });
 };
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
     User.find({})
         .then((user) => res.send({ data: user }))
-        .catch(() => res.status(SERVER_ERROR).send({ message: 'Error' }));
+        .catch((err) => next(res.status(SERVER_ERROR).send({ message: 'Error' })));
 };
 
-module.exports.getUserById = async(req, res) => {
+module.exports.getUserById = async(req, res, next) => {
     try {
         const user = await User.findById({ _id: req.user._id }).orFail(() => {
             const error = new Error('No user/card found with that id');
@@ -51,7 +51,7 @@ module.exports.getUserById = async(req, res) => {
             throw error;
         });
         res.send(user);
-    } catch (err) {
+    } catch (next) {
         if (err.statusCode === NOT_FOUND_ERROR) {
             res.status(NOT_FOUND_ERROR).send({ message: 'invalid user id' });
         } else if (err.name === 'CastError') {

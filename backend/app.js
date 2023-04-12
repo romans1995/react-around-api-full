@@ -50,7 +50,7 @@ const validateUrl = (value, helpers) => {
 Joi.string().required().custom(validateUrl) 
 // authorization
 
-
+// app.use(requestLogger);
 app.use(express.json());
 app.use(cors());
 app.options('*', cors());
@@ -67,6 +67,7 @@ app.use('/users',auth,userRoutes);
 app.use((req, res) => {
   res.status(NOT_FOUND_ERROR).send({ message: 'The requested resource was not found' });
 });
+// app.use(errorLogger);
 app.use(errors());
 router.use(auth);
 app.use(errorHandler);

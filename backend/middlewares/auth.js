@@ -9,24 +9,23 @@ module.exports = (req, res, next) => {
       .send({ message: 'Authorization required' });
   }
 
-   // auth header exists and is in correct format
-   // so extract the token from the header
-   const token = authorization.replace('Bearer ', '');
-   let payload;
-   try {
-     payload = jwt.verify(token, process.env.JWT_TOKEN);
-   } catch (err) {
-     console.log(err);
-     return res
+  // auth header exists and is in correct format
+  // so extract the token from the header
+  const token = authorization.replace('Bearer ', '');
+  let payload;
+  try {
+    payload = jwt.verify(token, process.env.JWT_TOKEN);
+  } catch (err) {
+    console.log(err);
+    return res
       .status(401)
       .send({ message: 'Authorization required' });
-   } 
-   
-   /* Save payload to request. This makes the payload available   
-   to the latter parts of the route. See the `Accessing user 
-   data with req.user` example for details. */
-   req.user = payload;
-   // sending the request to the next middleware
-   return next();
-};
+  }
 
+  /* Save payload to request. This makes the payload available   
+  to the latter parts of the route. See the `Accessing user 
+  data with req.user` example for details. */
+  req.user = payload;
+  // sending the request to the next middleware
+  return next();
+};

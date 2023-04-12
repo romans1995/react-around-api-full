@@ -62,16 +62,7 @@ const validateAvatar = celebrate({
 
 // check if id is valid
 
-// const validateObjectId = (req, res) => {
 
-//     const id = req.params._id;
-//     console.log(id)
-//     if (!ObjectId.isValid(id)) {
-//         return res.status(400).send({ message: `Invalid ID ${id}` });
-//     } else {
-//         return value;
-//     }
-// };
 const validateObjectId = celebrate({
     params: Joi.object().keys({
         _id: Joi.string()
