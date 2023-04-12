@@ -190,7 +190,6 @@ function App() {
   }, []);
 
     useEffect(() => {
-    console.log("useEfeect run",cards,token);
       if (token) {
       api
       .getUserInformation(token)
