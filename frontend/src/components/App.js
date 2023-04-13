@@ -146,8 +146,10 @@ function App() {
   };
 
   const handleLogin = (email, password) => {
+    
     signIn(email, password)
       .then(res => {
+        console.log(res.token)
         if (res.token) {
           setIsLoggedIn(true);
           localStorage.setItem('token', res.token);

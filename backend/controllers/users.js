@@ -6,6 +6,7 @@ const {
     ERROR_CODE,
     SERVER_ERROR,
 } = require('../constants/utils');
+const JWT_SECRET = process.env.JWT_TOKEN;
 
 module.exports.getUserData = (req, res) => {
     console.log(req.user._id)
@@ -19,12 +20,11 @@ module.exports.getUserData = (req, res) => {
 
 module.exports.login = (req, res, next) => {
     const { email, password } = req.body;
-
     return User.findUserByCredentials(email, password, next)
         .then((user) => {
             // create a token
             const token = jwt.sign({ _id: user._id },
-                process.env.JWT_TOKEN, {
+                JWT_SECRET, {
                     expiresIn: '7d',
                 },
             );
@@ -40,7 +40,7 @@ module.exports.login = (req, res, next) => {
 module.exports.getUsers = (req, res, next) => {
     User.find({})
         .then((user) => res.send({ data: user }))
-        .catch((err) => next(res.status(SERVER_ERROR).send({ message: 'Error' })));
+        .catch(() => next(res.status(SERVER_ERROR).send({ message: 'Error' })));
 };
 
 module.exports.getUserById = async(req, res, next) => {
@@ -69,24 +69,30 @@ module.exports.createUser = async(req, res) => {
         email,
         password,
     } = req.body;
+
     const hashdPassword = await bcrypt.hash(password, 10);
-    User.findOne({ email }).then((user) => (user ? res.status(ERROR_CODE).send({ message: 'this email is takin ' }) : ''));
+
     try {
-        await User.create({
+        const userExists = await User.findOne({ email });
+        if (userExists) {
+            return res.status(ERROR_CODE).send({ message: 'this email is taken ' });
+        }
+
+        const newUser = await User.create({
             name,
             about,
             avatar,
             email,
             password: hashdPassword,
-        }).then((user) => res.status(201).send({ data: user }));
-        // res.send(newUser);
+        });
+
+        return res.status(201).send({ data: newUser });
     } catch (err) {
-        console.log(err)
+        console.log(err);
         if (err.name === 'ValidationError') {
-            res.status(ERROR_CODE).send({ message: 'invalid data passed to the methods for creating a user ' });
-        } else {
-            res.status(SERVER_ERROR).send({ message: 'An error has occurred on the server.' });
+            return res.status(ERROR_CODE).send({ message: 'invalid data passed to the methods for creating a user ' });
         }
+        return res.status(SERVER_ERROR).send({ message: 'An error has occurred on the server.' });
     }
 };
 

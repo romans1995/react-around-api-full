@@ -40,7 +40,6 @@ class Api {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
             },
-
         })
     }
     createCard(data, token) {
@@ -98,15 +97,9 @@ class Api {
     }
 }
 
-// export const api = new Api({
-//     baseUrl: "https://around.nomoreparties.co/v1/cohort-3-en",
-//     headers: {
-//         authorization: "bc512917-6cb4-408b-9fef-08d285de7af3",
-//         "Content-Type": "application/json"
-//     }
-// });
 export const api = new Api({
-    baseUrl: "http://localhost:3000",
+    baseUrl: "https://api.around-r.chickenkiller.com",
+    // baseUrl: "http://localhost:3000",
     headers: {
         "Content-Type": "application/json"
     }
