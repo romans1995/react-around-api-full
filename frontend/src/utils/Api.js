@@ -98,8 +98,8 @@ class Api {
 }
 
 export const api = new Api({
-    baseUrl: "https://api.around-r.chickenkiller.com",
-    // baseUrl: "http://localhost:3000",
+    // baseUrl: "https://api.around-r.chickenkiller.com",
+    baseUrl: "http://localhost:3000",
     headers: {
         "Content-Type": "application/json"
     }

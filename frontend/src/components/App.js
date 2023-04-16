@@ -52,6 +52,8 @@ function App() {
   const [tooltipStatus, setTooltipStatus] = useState(false);
   const [token, setToken] = useState(localStorage.getItem('token'));
 
+  const [cardsLoaded, setCardsLoaded] = useState(false);
+
 
 
   const handleAddPlaceSubmit = (name, link) => {
@@ -149,7 +151,6 @@ function App() {
     
     signIn(email, password)
       .then(res => {
-        console.log(res.token)
         if (res.token) {
           setIsLoggedIn(true);
           localStorage.setItem('token', res.token);
@@ -170,6 +171,7 @@ function App() {
   const handleRegister = (email, password) => {
     signUp(email, password)
       .then(res => {
+        console.log(res.data,"register")
         if (res.data._id) {
           setTooltipStatus(true);
           history.push('/signin');
@@ -194,16 +196,11 @@ function App() {
     useEffect(() => {
       if (token) {
       api
-      .getUserInformation(token)
-      .then((user) => {
-        setCurrentUser(user);
-      })
-      .catch(console.log);
-      api
       .getInitalCards(token)
       .then((res) => {
         // console.log( Array.isArray(res),"res")
         setCards(res);
+        setCardsLoaded(true);
       })
       .catch(console.log);
       checkTocken(token).then(res => {
@@ -220,6 +217,12 @@ function App() {
         .finally(() => {
           setIsCheckToken(false);
         });
+        api
+      .getUserInformation(token)
+      .then((user) => {
+        setCurrentUser(user);
+      })
+      .catch(console.log);
     }else {
       setIsCheckToken(false);
     }
@@ -241,7 +244,7 @@ function App() {
             setIsLoggedIn={setIsLoggedIn}
           >
 
-            <Main
+{cardsLoaded ?<Main
               cards={cards}
               onEditAvatarClick={handleEditAvatarClick}
               onEditProfileClick={handleEditProfileClick}
@@ -249,7 +252,7 @@ function App() {
               handleCardClick={handleCardClick}
               onCardLike={handleCardLike}
               onCardDelete={handleDeleteButtonClick}
-            />
+            /> : <div>Loading...</div>}
           </ProtectedRoute>
           <Route path="/signIn">
             <Login handleLogin={handleLogin} />
